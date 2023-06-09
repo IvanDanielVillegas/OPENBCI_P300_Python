@@ -12,7 +12,7 @@ board = BoardShim(2, params)
 board.prepare_session()
 sample_rate=BoardShim.get_sampling_rate(2)
 board.start_stream()
-time.sleep(10)
+time.sleep(90)
     # data = board.get_current_board_data (256) # get latest 256 packages or less, doesnt remove them from internal buffer
 data = board.get_board_data()  # get all data and remove it from internal buffer
 board.stop_stream()
