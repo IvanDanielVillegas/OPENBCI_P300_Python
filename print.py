@@ -1,3 +1,7 @@
+
+
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -39,8 +43,9 @@ def detener_stream(board):
 def data_canales(data,Id_Board):
      
     eeg_channels = BoardShim.get_eeg_channels(2)
-    
-    for count, channel in enumerate(eeg_channels):
+    eeg_channels_cv= eeg_channels*(277)
+   # ((4.5/24)/(2^23 - 1))
+    for count, channel in enumerate(eeg_channels_cv):
             print('Original data for channel %d:' % channel)
             print(data[channel])
             #plt.plot(data[channel],label= "EEC")

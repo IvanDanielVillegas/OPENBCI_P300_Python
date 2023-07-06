@@ -22,7 +22,7 @@ class AlphabetMatrixWidget(QWidget):
             if(i=="C"):
                 button.setStyleSheet("background-color: #FF0000; font-size: 50px")  # Cambiar el tamaño de las letras
             else:
-                button.setStyleSheet("background-color: #000000; font-size: 50px")  # Cambiar el tamaño de las letras
+                button.setStyleSheet("background-color: #FF0000; font-size: 50px")  # Cambiar el tamaño de las letras
             layout.addWidget(button, row, column)
 
         self.setLayout(layout)

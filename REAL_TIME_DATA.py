@@ -7,7 +7,14 @@ import brainflow.board_shim
 from brainflow.board_shim import BoardShim, BrainFlowInputParams,BoardIds,LogLevels
 from brainflow.data_filter import DataFilter, WindowOperations, WaveletTypes
 from datetime import datetime
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui, QtCore
+
+
 import tkinter as tk
+
+
+
 INTERVALO_REFRESCO_RELOJ = 9  # En milisegundos
 
 
@@ -50,7 +57,7 @@ data=iniciar_stream(board)
 #board.stop_stream()
 #board.release_session()
 #data_canales(data,2)
-
+#SCALE_FACTOR = (4500000)/24/(2**23-1) #From the pyOpenBCI repo
 
 raiz = tk.Tk()
 variable_data = tk.StringVar(raiz, value=data_canales(data,2))

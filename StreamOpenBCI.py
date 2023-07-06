@@ -59,13 +59,13 @@ class Graph:
         data = self.board_shim.get_current_board_data(self.num_points)
         for count, channel in enumerate(self.exg_channels):
             # plot timeseries
-            DataFilter.detrend(data[channel], DetrendOperations.CONSTANT.value)
-            DataFilter.perform_bandpass(data[channel], self.sampling_rate, 3.0, 45.0, 2,
-                                        FilterTypes.BUTTERWORTH_ZERO_PHASE, 0)
-            DataFilter.perform_bandstop(data[channel], self.sampling_rate, 48.0, 52.0, 2,
-                                        FilterTypes.BUTTERWORTH_ZERO_PHASE, 0)
-            DataFilter.perform_bandstop(data[channel], self.sampling_rate, 58.0, 62.0, 2,
-                                        FilterTypes.BUTTERWORTH_ZERO_PHASE, 0)
+            #DataFilter.detrend(data[channel], DetrendOperations.CONSTANT.value)
+            #DataFilter.perform_bandpass(data[channel], self.sampling_rate, 3.0, 45.0, 2,
+             #                           FilterTypes.BUTTERWORTH_ZERO_PHASE, 0)
+            #DataFilter.perform_bandstop(data[channel], self.sampling_rate, 48.0, 52.0, 2,
+             #                           FilterTypes.BUTTERWORTH_ZERO_PHASE, 0)
+            #DataFilter.perform_bandstop(data[channel], self.sampling_rate, 58.0, 62.0, 2,
+             #                           FilterTypes.BUTTERWORTH_ZERO_PHASE, 0)
             self.curves[count].setData(data[channel].tolist())
 
         self.app.processEvents()
