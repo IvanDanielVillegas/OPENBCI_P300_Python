@@ -9,7 +9,7 @@ teclado = [['A', 'B', 'C', 'D', 'E'],
            ['K', 'L', 'M', 'N', 'Ñ'],
            ['O', 'P', 'Q', 'R', 'S'],
            ['T', 'U', 'V', 'W', 'X'],
-           ['Y','Z']]
+           ['Y', 'Z', '.', ',', '-']]
 
 # Clase para la ventana del teclado
 class TecladoVirtual(QWidget):
@@ -22,8 +22,8 @@ class TecladoVirtual(QWidget):
         self.setLayout(grid)
 
         # Inicializar colores de filas y columnas
-        self.colores_filas = [QColor(255, 255, 255), QColor(200, 200, 200), QColor(255, 0, 0)]
-        self.colores_columnas = [QColor(255, 255, 255), QColor(200, 200, 200), QColor(0, 255, 0)]
+        self.colores_filas = [QColor(255, 255, 255), QColor(200, 200, 200)]
+        self.colores_columnas = [QColor(255, 255, 255)]
 
         # Crear botones del teclado
         self.botones = []
