@@ -1,4 +1,5 @@
 import sys
+import random
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
@@ -53,17 +54,31 @@ class TecladoVirtual(QWidget):
 
         # Actualizar los colores de las columnas
         self.colores_columnas = self.colores_columnas[1:] + [self.colores_columnas[0]]
+        
+        for i in range(15):
+            matriz = teclado  
+            while len(matriz) > 0:
+                fila = random.choice(matriz)
+                while len(fila) > 0:
+                    letra = random.choice(fila)
+                    fila.index(letra)
+                    fila.remove(letra)
+                    print(letra)
+                matriz.index(fila)
+                matriz.remove(fila)
+                print(letra)
+                
 
         # Actualizar los colores de los botones
-        for fila in range(len(teclado)):
-            for columna in range(len(teclado[fila])):
-                indice = fila * len(teclado[fila]) + columna
-                if indice < len(self.botones):
-                    boton = self.botones[indice]
-                    color_fila = self.colores_filas[fila % len(self.colores_filas)]
-                    color_columna = self.colores_columnas[columna % len(self.colores_columnas)]
-                    color_final = QColor(color_fila.red(), color_columna.green(), color_fila.blue())
-                    boton.setStyleSheet("background-color: " + color_final.name())
+        #for fila in range(len(teclado)):
+        #    for columna in range(len(teclado[fila])):
+        #        indice = fila * len(teclado[fila]) + columna
+        #        if indice < len(self.botones):
+        #            boton = self.botones[indice]
+        #            color_fila = self.colores_filas[fila % len(self.colores_filas)]
+        #            color_columna = self.colores_columnas[columna % len(self.colores_columnas)]
+        #            color_final = QColor(color_fila.red(), color_columna.green(), color_fila.blue())
+        #            boton.setStyleSheet("background-color: " + color_final.name())
 
 
 
