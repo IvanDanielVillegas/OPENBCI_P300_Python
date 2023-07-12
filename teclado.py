@@ -1,5 +1,6 @@
 import sys
 import random
+import time
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
@@ -34,11 +35,12 @@ class TecladoVirtual(QWidget):
                 grid.addWidget(boton, fila, columna)
                 boton.clicked.connect(self.boton_presionado)
                 self.botones.append(boton)
+                
 
         # Cambiar colores de filas y columnas con el tiempo
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.actualizar_colores)
-        self.timer.start(100)  # Cambiar cada 1000 ms (1 segundo)
+        #self.timer = QTimer()
+        #self.timer.timeout.connect(self.actualizar_colores)
+        #self.timer.start(10000)  # Cambiar cada 1000 ms (1 segundo)
 
         self.setWindowTitle('Teclado Virtual')
         self.show()
@@ -60,13 +62,20 @@ class TecladoVirtual(QWidget):
             while len(matriz) > 0:
                 fila = random.choice(matriz)
                 while len(fila) > 0:
-                    letra = random.choice(fila)
-                    fila.index(letra)
-                    fila.remove(letra)
-                    print(letra)
+                    time.sleep(1)
+                    columna = random.choice(fila)
+                    indice = matriz.index(fila) + fila.index(columna)
+                    boton = self.botones[indice]
+                    color_fila = self.colores_filas[matriz.index(fila) % len(self.colores_filas)]
+                    color_final = QColor(color_fila.red())
+                    boton.setStyleSheet("background-color: " + color_final.name())
+                    
+                    fila.remove(columna)
+                    
+                    print(columna)
                 matriz.index(fila)
                 matriz.remove(fila)
-                print(letra)
+
                 
 
         # Actualizar los colores de los botones
@@ -86,4 +95,6 @@ class TecladoVirtual(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ventana = TecladoVirtual()
+    for i in range(5):
+            ventana.actualizar_colores
     sys.exit(app.exec_())
