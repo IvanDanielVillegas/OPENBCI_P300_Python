@@ -4,6 +4,16 @@ import time
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
+from time import time, sleep
+
+tic_time = 0
+
+def tic():
+    global tic_time
+    tic_time = time()
+
+def toc():
+    return time() - tic_time
 
 # Configuración del teclado virtual
 teclado = [['A', 'B', 'C', 'D', 'E'],
@@ -34,13 +44,14 @@ class TecladoVirtual(QWidget):
                 boton = QPushButton(teclado[fila][columna])
                 grid.addWidget(boton, fila, columna)
                 boton.clicked.connect(self.boton_presionado)
+                boton.setStyleSheet("background-color: rgb(255, 255, 255)")
                 self.botones.append(boton)
                 
 
         # Cambiar colores de filas y columnas con el tiempo
         self.timer = QTimer()
         self.timer.timeout.connect(self.actualizar_colores)
-        self.timer.start(1000)  # Cambiar cada 1000 ms (1 segundo)
+        self.timer.start(10000)  # Cambiar cada 1000 ms (1 segundo)
 
         self.setWindowTitle('Teclado Virtual')
         self.show()
@@ -63,8 +74,10 @@ class TecladoVirtual(QWidget):
 
         # Actualizar los colores de las columnas
         self.colores_columnas = self.colores_columnas[1:] + [self.colores_columnas[0]]
-        
+        print(toc())
+        print("nuevo")
         for i in range(15):
+            print(i)
             matriz = [['A', 'B', 'C', 'D', 'E'],
                     ['F', 'G', 'H', 'I', 'J'],
                     ['K', 'L', 'M', 'N', 'Ñ'],
@@ -74,38 +87,26 @@ class TecladoVirtual(QWidget):
             while len(matriz) > 0:
                 fila = random.choice(matriz)
                 while len(fila) > 0:
-                    time.sleep(0.1)
+                    #time.sleep(0.1)
                     letra = random.choice(fila)
                     for i in range(len(teclado)):
                         if letra in teclado[i]:
                             row, col = (i, teclado[i].index(letra)) # Devuelve el índice como una tupla
                             indice = row * len(teclado[row]) + col
-                            print([row, col])
+                            #print([row, col])
                             
                     boton = self.botones[indice]
-                    boton.setStyleSheet("background-color: rgb(255, 255, 255)")
+                    boton.setStyleSheet("background-color: rgb(200, 200, 200)")
                     fila.remove(letra)
                     QApplication.processEvents()
-                    time.sleep(0.1)
-                    boton.setStyleSheet("background-color: rgb(200, 200, 200)")
+                    sleep(0.1)
+                    boton.setStyleSheet("background-color: rgb(255, 255, 255)")
                     QApplication.processEvents()
                     #print(columna)
                 
-                matriz.index(fila)
                 matriz.remove(fila)
-
-                
-
-        # Actualizar los colores de los botones
-        #for fila in range(len(teclado)):
-        #    for columna in range(len(teclado[fila])):
-        #        indice = fila * len(teclado[fila]) + columna
-        #        if indice < len(self.botones):
-        #            boton = self.botones[indice]
-        #            color_fila = self.colores_filas[fila % len(self.colores_filas)]
-        #            color_columna = self.colores_columnas[columna % len(self.colores_columnas)]
-        #            color_final = QColor(color_fila.red(), color_columna.green(), color_fila.blue())
-        #            boton.setStyleSheet("background-color: " + color_final.name())
+        sleep(2)
+        tic()
 
 
 
