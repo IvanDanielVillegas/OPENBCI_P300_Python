@@ -1,6 +1,7 @@
 import sys
 import random
 import time
+import asyncio
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
@@ -15,6 +16,9 @@ def tic():
 def toc():
     return time() - tic_time
 
+muestra = 0
+datos = []
+datoMostrado = 100
 # Configuración del teclado virtual
 teclado = [['A', 'B', 'C', 'D', 'E'],
            ['F', 'G', 'H', 'I', 'J'],
@@ -22,6 +26,31 @@ teclado = [['A', 'B', 'C', 'D', 'E'],
            ['O', 'P', 'Q', 'R', 'S'],
            ['T', 'U', 'V', 'W', 'X'],
            ['Y', 'Z', '.', ',', '-']]
+
+def sig_muestra():
+    global muestra
+    muestra += 1
+
+def find(elemento, lista):
+    for i in range(len(lista)):
+        if elemento in lista[i]:
+            indice = (i, lista[i].index(elemento)) # Devuelve el índice como una tupla
+            #print(indice)
+    return indice
+    
+def organizar_aleatoria():
+    elemento = []
+    # Organizar aleatoriamente los elementos de la lista
+    elementos_aleatorios = [elemento for sublista in teclado for elemento in sublista]
+    random.shuffle(elementos_aleatorios)
+
+    # Recorrer los elementos sin repetir
+    indice = 0
+    while indice < len(elementos_aleatorios):
+        elemento.append( elementos_aleatorios[indice])
+        indice += 1
+    return elemento
+
 
 # Clase para la ventana del teclado
 class TecladoVirtual(QWidget):
@@ -50,8 +79,8 @@ class TecladoVirtual(QWidget):
 
         # Cambiar colores de filas y columnas con el tiempo
         self.timer = QTimer()
-        self.timer.timeout.connect(self.actualizar_colores)
-        self.timer.start(10000)  # Cambiar cada 1000 ms (1 segundo)
+        self.timer.timeout.connect(self.mostar_lista)
+        self.timer.start(1000)  # Cambiar cada 1000 ms (1 segundo)
 
         self.setWindowTitle('Teclado Virtual')
         self.show()
@@ -61,52 +90,32 @@ class TecladoVirtual(QWidget):
         letra = boton.text()
         print("Letra seleccionada:", letra)
         
-    def find(elemento, lista ):
-        for i in range(len(lista)):
-            if elemento in lista[i]:
-                indice = (i, lista[i].index(elemento)) # Devuelve el índice como una tupla
-                print(indice)
-        return indice
-
-    def actualizar_colores(self):
-        # Actualizar los colores de las filas
-        self.colores_filas = self.colores_filas[1:] + [self.colores_filas[0]]
-
-        # Actualizar los colores de las columnas
-        self.colores_columnas = self.colores_columnas[1:] + [self.colores_columnas[0]]
-        print(toc())
-        print("nuevo")
+    
+    async def encender_apagar(self,indice):
+        datoMostrado = indice
+        boton = self.botones[indice]
+        boton.setStyleSheet("background-color: rgb(200, 200, 200)")
+        QApplication.processEvents()
+        sleep(0.1)
+        datoMostrado=100
+        boton.setStyleSheet("background-color: rgb(255, 255, 255)")
+        QApplication.processEvents()
+        
+            
+    def mostar_lista(self):
         for i in range(15):
-            print(i)
-            matriz = [['A', 'B', 'C', 'D', 'E'],
-                    ['F', 'G', 'H', 'I', 'J'],
-                    ['K', 'L', 'M', 'N', 'Ñ'],
-                    ['O', 'P', 'Q', 'R', 'S'],
-                    ['T', 'U', 'V', 'W', 'X'],
-                    ['Y', 'Z', '.', ',', '-']]  
-            while len(matriz) > 0:
-                fila = random.choice(matriz)
-                while len(fila) > 0:
-                    #time.sleep(0.1)
-                    letra = random.choice(fila)
-                    for i in range(len(teclado)):
-                        if letra in teclado[i]:
-                            row, col = (i, teclado[i].index(letra)) # Devuelve el índice como una tupla
-                            indice = row * len(teclado[row]) + col
-                            #print([row, col])
-                            
-                    boton = self.botones[indice]
-                    boton.setStyleSheet("background-color: rgb(200, 200, 200)")
-                    fila.remove(letra)
-                    QApplication.processEvents()
-                    sleep(0.1)
-                    boton.setStyleSheet("background-color: rgb(255, 255, 255)")
-                    QApplication.processEvents()
-                    #print(columna)
-                
-                matriz.remove(fila)
-        sleep(2)
-        tic()
+            orden = organizar_aleatoria()
+            print (orden)
+            for letra in orden:
+                inde = find(letra, teclado)
+                indice = inde[0] * len(teclado[inde[0]]) + inde[1] #row = inde[0]   col = inde[1]
+                #muestra = muestra + 1
+                datos.append([sig_muestra(), datoMostrado])
+                sleep(0.008)
+                #print(teclado.index(letra))
+                asyncio.run(self.encender_apagar(indice))
+        print(datos)
+        
 
 
 
@@ -116,3 +125,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ventana = TecladoVirtual()
     sys.exit(app.exec_())
+    
