@@ -29,6 +29,7 @@ teclado = [['A', 'B', 'C', 'D', 'E'],
 
 def sig_muestra():
     global muestra
+    datos.append([muestra, datoMostrado])
     muestra += 1
 
 def find(elemento, lista):
@@ -81,6 +82,10 @@ class TecladoVirtual(QWidget):
         self.timer = QTimer()
         self.timer.timeout.connect(self.mostar_lista)
         self.timer.start(1000)  # Cambiar cada 1000 ms (1 segundo)
+        
+        self.timer2 = QTimer()
+        self.timer2.timeout.connect(sig_muestra)
+        self.timer2.start(8) 
 
         self.setWindowTitle('Teclado Virtual')
         self.show()
@@ -110,11 +115,10 @@ class TecladoVirtual(QWidget):
                 inde = find(letra, teclado)
                 indice = inde[0] * len(teclado[inde[0]]) + inde[1] #row = inde[0]   col = inde[1]
                 #muestra = muestra + 1
-                datos.append([sig_muestra(), datoMostrado])
                 sleep(0.008)
                 #print(teclado.index(letra))
                 asyncio.run(self.encender_apagar(indice))
-        print(datos)
+            print(datos)
         
 
 
