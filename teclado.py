@@ -2,6 +2,7 @@ import sys
 import random
 import time
 import asyncio
+import threading
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
@@ -75,20 +76,27 @@ class TecladoVirtual(QWidget):
                 grid.addWidget(boton, fila, columna)
                 boton.clicked.connect(self.boton_presionado)
                 boton.setStyleSheet("background-color: rgb(255, 255, 255)")
-                self.botones.append(boton)
-                
+                self.botones.append(boton) 
+        
+        hilo1 = threading.Thread(target=self.timer_muestreo())
+        hilo2 = threading.Thread(target=self.timer_show_lista())
+        hilo1.start()
+        hilo2.start()
 
+        self.setWindowTitle('Teclado Virtual')
+        self.show()
+
+    def timer_show_lista(self):
         # Cambiar colores de filas y columnas con el tiempo
         self.timer = QTimer()
         self.timer.timeout.connect(self.mostar_lista)
         self.timer.start(1000)  # Cambiar cada 1000 ms (1 segundo)
-        
+
+    def timer_muestreo(self):
         self.timer2 = QTimer()
         self.timer2.timeout.connect(sig_muestra)
-        self.timer2.start(8) 
+        self.timer2.start(8)
 
-        self.setWindowTitle('Teclado Virtual')
-        self.show()
 
     def boton_presionado(self):
         boton = self.sender()
@@ -97,6 +105,7 @@ class TecladoVirtual(QWidget):
         
     
     async def encender_apagar(self,indice):
+        global datoMostrado
         datoMostrado = indice
         boton = self.botones[indice]
         boton.setStyleSheet("background-color: rgb(200, 200, 200)")
@@ -118,7 +127,7 @@ class TecladoVirtual(QWidget):
                 sleep(0.008)
                 #print(teclado.index(letra))
                 asyncio.run(self.encender_apagar(indice))
-            print(datos)
+            print(len(datos))
         
 
 
